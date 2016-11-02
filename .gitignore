@@ -51,4 +51,5 @@ hs_err_pid*
 
 # intellij files
 .idea/
-freestyle-with-java-miki-gyuri.iml
+*.iml
+out/
