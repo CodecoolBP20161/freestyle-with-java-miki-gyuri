@@ -4,12 +4,8 @@ import java.util.*;
  * Created by gyuri & miki on 2016.11.03..
  */
 public class Game {
-    Object[] pastGuesses;
     List<Integer> puzzle = new ArrayList<>(4);
-    List<Integer> userInput = new ArrayList<>(4);
-    Game(Object[] pastGuesses, List<Integer> userInput){
-        this.pastGuesses = pastGuesses;
-        this.userInput = userInput;
+    Game(){
         numGenerator();
     }
     List<Integer> numGenerator(){
@@ -22,7 +18,7 @@ public class Game {
         }
         return puzzle;
     }
-    int[] compare(){
+    int[] compare(List<Integer> userInput){
         int[] helper = {0, 0};
         List<Integer> cpPuzzle = puzzle;
         List<Integer> cpUserInput = userInput;
