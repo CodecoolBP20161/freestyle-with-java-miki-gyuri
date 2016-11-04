@@ -21,7 +21,7 @@ import java.util.List;
 public class Main extends Application {
 
     Stage window;
-    Scene menu, game, toplist;
+    Scene menu, game, toplist; // menu and topList reserved for later implementation
     List<Integer> results;
 
 
@@ -37,11 +37,10 @@ public class Main extends Application {
 
         Label gameTitle = new Label("Game");
         ListView<String> guesses = new ListView<>();
-        ObservableList<String> items = FXCollections.observableArrayList ();
-        guesses.setItems(items);
+        ObservableList<String> items = FXCollections.observableArrayList();
         TextField guess = new TextField();
         Button submitGuess = new Button("OK");
-        submitGuess.setOnAction(e -> isInt(guess.getText(), items, newGame));
+        submitGuess.setOnAction(e -> passToLogic(guess.getText(), newGame, guesses, items));
         HBox userGuess = new HBox(10);
         userGuess.getChildren().addAll(guess, submitGuess);
         userGuess.setAlignment(Pos.TOP_CENTER);
@@ -55,30 +54,25 @@ public class Main extends Application {
         window.show();
 
     }
-    private void isInt(String input, ObservableList<String> items, Game newGame) {
-        try {
-            List<Integer> tmpList = new ArrayList<>(4);
-            int guess = Integer.parseInt(input);
-            while (guess > 0) {
-                tmpList.add(guess % 10);
-                guess /= 10;
-            }
-            List<Integer> cpTmp = new ArrayList<>(4);
-            for (int i = -1; i == -(tmpList.size()); i--) cpTmp.set(i, tmpList.get(i));
-            String result = "";
-            for (Integer num : cpTmp) {
-                result += num;
-            }
-            tmpList = cpTmp;
-            result += ": " + Arrays.toString(newGame.compare(tmpList));
-            items.add(result);
+    private void passToLogic(String input, Game newGame, ListView<String> guesses, ObservableList<String> items) {
 
+        // -- here we need to implement test whether input is 4 digits or something else... --
 
-        } catch (NumberFormatException e) {
-            Alert invalidInput = new Alert(Alert.AlertType.ERROR);
-            invalidInput.showAndWait()
-                    .filter(response -> response == ButtonType.OK)
-                    .ifPresent(response -> isInt(input, items, newGame));
+        List<Integer> inputListNum = new ArrayList<>(4);
+        // converting user input to list:
+        List<String> inputList = new ArrayList<>(Arrays.asList(input.split("")));
+        // convert list items to integer and pass it to Integer list (/@gyuri hates Java):
+        for (int i = 0; i<inputList.size(); i++) {
+            inputListNum.add(Integer.valueOf(inputList.get(i)));
         }
+        formatOutput(newGame.getHelper(inputListNum), input, guesses, items);
+    }
+    private void formatOutput(List<Integer> helpers, String input, ListView<String> guesses, ObservableList<String> items){
+        String output = String.format("%s | %d | %d", input, helpers.get(0), helpers.get(1));
+        outputToList(output, guesses, items);
+    }
+    private void outputToList(String output, ListView<String> guesses, ObservableList<String> items){
+        items.addAll(output);
+        guesses.setItems(items);
     }
 }
