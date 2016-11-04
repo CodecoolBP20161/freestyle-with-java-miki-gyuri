@@ -58,6 +58,13 @@ public class Main extends Application {
 
         // -- here we need to implement test whether input is 4 digits or something else... --
 
+        if (input.length() > 4) {
+            try {
+                throw new IncorrectLengthException("the number u passed in is shorter or longer than 4 characters :@");
+            } catch (IncorrectLengthException e) {
+                e.printStackTrace();
+            }
+        }
         List<Integer> inputListNum = new ArrayList<>(4);
         // converting user input to list:
         List<String> inputList = new ArrayList<>(Arrays.asList(input.split("")));
